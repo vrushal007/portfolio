@@ -45,7 +45,7 @@ export default function Hero() {
       }}
     >
       {/* 3D Scene */}
-      <Box
+      {/* <Box
         sx={{
           position: "absolute",
           top: 0,
@@ -69,7 +69,7 @@ export default function Hero() {
           // autoRotateSpeed={0.5}
           />
         </Canvas>
-      </Box>
+      </Box> */}
 
       {/* Content */}
       <Container maxWidth="lg" sx={{ position: "relative", zIndex: 1 }}>

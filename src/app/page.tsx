@@ -20,47 +20,47 @@ import GalaxyBackground from "@/components/layout/GalaxyBackround";
 export default function Home() {
   const mainRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
+  // useEffect(() => {
+  //   if (typeof window === "undefined") {
+  //     return;
+  //   }
 
-    gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+  //   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
-    const ctx = gsap.context(() => {
-      const sections = gsap.utils.toArray<HTMLElement>(".section");
+  //   const ctx = gsap.context(() => {
+  //     const sections = gsap.utils.toArray<HTMLElement>(".section");
 
-      sections.forEach((section, i) => {
-        ScrollTrigger.create({
-          trigger: section,
-          start: "top top",
-          pin: true,
-          pinSpacing: false,
-        });
+  //     sections.forEach((section, i) => {
+  //       ScrollTrigger.create({
+  //         trigger: section,
+  //         start: "top top",
+  //         pin: true,
+  //         pinSpacing: false,
+  //       });
 
-        if (i !== sections.length - 1) {
-          gsap.to(section, {
-            opacity: 0,
-            ease: "power1.inOut",
-            scrollTrigger: {
-              trigger: sections[i + 1],
-              start: "top bottom",
-              end: "top top",
-              scrub: true,
-            },
-          });
-        }
-      });
-    }, mainRef);
+  //       if (i !== sections.length - 1) {
+  //         gsap.to(section, {
+  //           opacity: 0,
+  //           ease: "power1.inOut",
+  //           scrollTrigger: {
+  //             trigger: sections[i + 1],
+  //             start: "top bottom",
+  //             end: "top top",
+  //             scrub: true,
+  //           },
+  //         });
+  //       }
+  //     });
+  //   }, mainRef);
 
-    return () => ctx.revert();
-  }, []);
+  //   return () => ctx.revert();
+  // }, []);
 
   return (
     <Box ref={mainRef}>
       <Navigation />
       {/* <Background /> */}
-      {/* <GalaxyBackground /> */}
+      <GalaxyBackground />
       <Box id="hero" className="section">
         <Hero />
       </Box>

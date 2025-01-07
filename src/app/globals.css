@@ -1,0 +1,41 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Roboto', sans-serif;
+  overflow-x: hidden;
+}
+
+.theme-light {
+  --primary: #1976d2;
+  --background: #f5f5f5;
+  --text: #212121;
+}
+
+.theme-dark {
+  --primary: #90caf9;
+  --background: #0d1117;
+  --text: #ffffff;
+}
+
+/* Galaxy Background */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #1b2735 0%, #090a0f 100%);
+  z-index: -1;
+  animation: galaxy 10s infinite alternate ease-in-out;
+}
+
+/* Star animations */
+@keyframes galaxy {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 1000px 1000px;
+  }
+}

@@ -9,15 +9,12 @@ import {
   Button,
   IconButton,
   Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
   useTheme,
   useMediaQuery,
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { ScrollToPlugin, ScrollTrigger } from "gsap/all";
 import gsap from "gsap";
 
 const navItems = [
@@ -35,13 +32,17 @@ export default function Navigation() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  useEffect(() => {
+    gsap.registerPlugin(ScrollToPlugin);
+  }, []);
+
   // Handle scroll to section
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       gsap.to(window, {
         duration: 1,
-        scrollTo: { y: element, offsetY: 0 },
+        scrollTo: { y: `#${id}`, offsetY: 50 },
         ease: "power3.inOut",
       });
       setMobileOpen(false);
@@ -158,34 +159,39 @@ export default function Navigation() {
         sx={{
           "& .MuiDrawer-paper": {
             width: 240,
-            backgroundColor: "background.paper",
+            background: "rgba(18, 18, 18, 1)",
           },
+          // paper overlay
+          "& .MuiBackdrop-root": { backgroundColor: "rgba(0, 0, 0, 0.6)" },
         }}
       >
-        <List>
+        <Box sx={{ display: "flex", gap: 2, flexDirection: "column", p: 2 }}>
           {navItems.map(({ label, id }) => (
-            <ListItem key={id} disablePadding>
-              <ListItemButton
-                onClick={() => scrollToSection(id)}
-                sx={{
-                  backgroundColor:
-                    activeSection === id
-                      ? "rgba(0, 245, 212, 0.1)"
-                      : "transparent",
-                }}
-              >
-                <ListItemText
-                  primary={label}
-                  sx={{
-                    "& .MuiListItemText-primary": {
-                      color: activeSection === id ? "#00f5d4" : "inherit",
-                    },
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
+            <Button
+              key={id}
+              className="nav-item"
+              onClick={() => scrollToSection(id)}
+              sx={{
+                color: "white",
+                position: "relative",
+                "&::after": {
+                  content: '""',
+                  position: "absolute",
+                  bottom: 0,
+                  // left: 0,
+                  width: activeSection === id ? "30%" : "0%",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  height: "2px",
+                  background: "linear-gradient(45deg, #00f5d4, #7209b7)",
+                  transition: "width 0.3s ease",
+                },
+              }}
+            >
+              {label}
+            </Button>
           ))}
-        </List>
+        </Box>
       </Drawer>
     </>
   );

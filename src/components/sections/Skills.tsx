@@ -13,14 +13,31 @@ import gsap from "gsap";
 import CodeIcon from "@mui/icons-material/Code";
 import StorageIcon from "@mui/icons-material/Storage";
 import BuildIcon from "@mui/icons-material/Build";
+/*
+Programming Language :
+C++, JavaScript
+Technologies And Frameworks:
+React.JS, Next.JS, Jest,
+Node.JS, Express.JS, Nest.JS,
+ELK, Redux, Flutter, Socket.IO,
+Microservices
+Database Management:
+SQL, MongoDB
+Platforms:
+VS Code, GitHub, Docker,
+Android Studio, Flutterflow,
+Firebase
+
+*/
 
 const skillsData = {
   frontend: {
     icon: <CodeIcon sx={{ fontSize: 40 }} />,
     title: "Frontend",
     skills: [
-      { name: "React/Next.js", level: 90 },
-      { name: "TypeScript", level: 85 },
+      { name: "React/Next.js", level: 92 },
+      { name: "JavaScript/TypeScript", level: 90 },
+      { name: "Redux", level: 90 },
       { name: "HTML/CSS", level: 95 },
       { name: "Material UI", level: 88 },
     ],
@@ -29,21 +46,23 @@ const skillsData = {
     icon: <StorageIcon sx={{ fontSize: 40 }} />,
     title: "Backend",
     skills: [
-      { name: "Node.js", level: 85 },
-      { name: "Python", level: 80 },
-      { name: "MongoDB", level: 82 },
-      { name: "PostgreSQL", level: 78 },
+      { name: "Node.js", level: 90 },
+      { name: "Nest.js", level: 82 },
+      { name: "Express.js", level: 85 },
+      { name: "Socket.IO", level: 80 },
+      { name: "Microservices", level: 75 },
     ],
   },
   tools: {
     icon: <BuildIcon sx={{ fontSize: 40 }} />,
     title: "Tools & Others",
     skills: [
-      { name: "Git", level: 88 },
-      { name: "Docker", level: 75 },
+      { name: "Docker", level: 85 },
+      { name: "ELK Stack", level: 70 },
       { name: "AWS", level: 70 },
-      { name: "CI/CD", level: 72 },
-    ],
+      { name: "Firebase", level: 85 },
+      { name: "Flutterflow", level: 90 },
+    ]
   },
 };
 

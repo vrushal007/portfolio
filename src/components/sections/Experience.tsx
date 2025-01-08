@@ -1,32 +1,51 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Box, Container, Typography, Paper } from "@mui/material";
+import {
+  Box,
+  Container,
+  Typography,
+  Paper,
+  List,
+  ListItemText,
+  ListItem,
+  ListItemIcon,
+} from "@mui/material";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import WorkIcon from "@mui/icons-material/Work";
+import { CheckCircleOutline } from "@mui/icons-material";
 
 const experiences = [
   {
-    title: "Senior Full Stack Developer",
-    company: "Tech Solutions Inc.",
-    period: "2021 - Present",
-    description:
-      "Led development of enterprise web applications using React, Node.js, and cloud technologies. Mentored junior developers and implemented CI/CD pipelines.",
+    title: "Software Engineer",
+    company: "Sunbots Innovations LLP",
+    period: "Jun 2023 - Nov 2024",
+    descriptionPoints: [
+      `Built scalable web applications with React.js and Next.js.`,
+      `Accelerated app development using Flutter Flow.`,
+      `Enhanced analytics with Google Analytics APIs and ELK stack.`,
+      `Managed deployments on AWS EC2, RDS, and Amplify.`,
+    ],
   },
   {
-    title: "Full Stack Developer",
-    company: "Digital Innovations Co.",
-    period: "2019 - 2021",
-    description:
-      "Developed and maintained multiple client projects. Implemented responsive designs and RESTful APIs using modern tech stack.",
+    title: "Frontend Developer Intern",
+    company: "Obligate Solutions",
+    period: "Jun 2022 - Dec 2022",
+    descriptionPoints: [
+      `Developed an e-commerce website with React.js.`,
+      `Ensured seamless integration with cross-functional teams.`,
+    ],
   },
   {
-    title: "Junior Web Developer",
-    company: "StartUp Ventures",
-    period: "2017 - 2019",
-    description:
-      "Built and maintained client websites. Collaborated with design team to implement pixel-perfect UI components.",
+    title: "Android Developer Intern",
+    company: "Veybit Technologies Pvt. Ltd.",
+    period: "Jan 2022 - Feb 2022",
+    descriptionPoints: [
+      `Developed and deployed a mobile app on Google Play Store.`,
+      `Handled coding, testing, and troubleshooting independently.`,
+      `Managed the entire app project and provided maintenance.`,
+    ],
   },
 ];
 
@@ -43,7 +62,7 @@ export default function Experience() {
       gsap.from(sectionRef.current, {
         opacity: 0,
         y: 100,
-        duration: 1,
+        duration: 0.3,
         scrollTrigger: {
           trigger: sectionRef.current,
           start: "top center+=100",
@@ -85,7 +104,7 @@ export default function Experience() {
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ minHeight: "100vh", py: 8 }}>
+    <Container sx={{ minHeight: "100vh", py: 8 }}>
       <Box
         ref={sectionRef}
         sx={{
@@ -111,12 +130,14 @@ export default function Experience() {
           ref={timelineRef}
           sx={{
             position: "relative",
-            maxWidth: "800px",
-            margin: "0 auto",
+            width: "100%",
             "&::before": {
               content: '""',
               position: "absolute",
-              left: "50%",
+              left: {
+                xs: "0%",
+                md: "50%",
+              },
               transform: "translateX(-50%)",
               width: "5px", // Thicker line
               height: "100%",
@@ -129,7 +150,10 @@ export default function Experience() {
             ref={progressRef}
             sx={{
               position: "absolute",
-              left: "50%",
+              left: {
+                xs: "0%",
+                md: "50%",
+              },
               transform: "translateX(-50%)",
               width: "5px",
               height: "6px",
@@ -139,9 +163,6 @@ export default function Experience() {
                 "0 0 20px 5px rgba(114, 9, 183, 0.8), 0 0 30px 10px rgba(0, 245, 212, 0.5)",
               zIndex: 0,
               animation: "moveThumb linear 0s infinite",
-              "@keyframes moveThumb": {
-                // positioning can be managed by ScrollTrigger in useEffect
-              },
               "&::before, &::after": {
                 content: '""',
                 position: "absolute",
@@ -177,14 +198,21 @@ export default function Experience() {
             <Box
               key={index}
               sx={{
+                width: "100%",
                 display: "flex",
-                justifyContent: index % 2 === 0 ? "flex-start" : "flex-end",
-                mb: 4,
+                justifyContent: {
+                  xs: "flex-end",
+                  md: index % 2 === 0 ? "flex-start" : "flex-end",
+                },
+                mb: index === experiences.length - 1 ? 0 : 6,
                 position: "relative",
                 "&::before": {
                   content: '""',
                   position: "absolute",
-                  left: "50%",
+                  left: {
+                    xs: "0%",
+                    md: "50%",
+                  },
                   top: "50%",
                   transform: "translate(-50%, -50%)",
                   width: "20px",
@@ -198,7 +226,10 @@ export default function Experience() {
               <Paper
                 sx={{
                   p: 4,
-                  width: "45%",
+                  width: {
+                    xs: "90%",
+                    md: "45%",
+                  },
                   background: "rgba(255, 255, 255, 0.03)",
                   backdropFilter: "blur(10px)",
                   border: "1px solid rgba(255, 255, 255, 0.1)",
@@ -227,9 +258,13 @@ export default function Experience() {
                 >
                   {exp.period}
                 </Typography>
-                <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                  {exp.description}
-                </Typography>
+                <List>
+                  {exp.descriptionPoints.map((point, index) => (
+                    <ListItem key={index} sx={{ p: 0 }}>
+                      <ListItemText primary={point} />
+                    </ListItem>
+                  ))}
+                </List>
               </Paper>
             </Box>
           ))}

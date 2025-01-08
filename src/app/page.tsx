@@ -1,11 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { Box } from "@mui/material";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
-import { ScrollToPlugin } from "gsap/dist/ScrollToPlugin";
-import Background from "@/components/layout/Background";
 import Navigation from "@/components/layout/Navigation";
 
 // Import all sections
@@ -16,48 +12,11 @@ import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import GalaxyBackground from "@/components/layout/GalaxyBackround";
+import Footer from "@/components/Footer";
 
 export default function Home() {
-  const mainRef = useRef<HTMLDivElement>(null);
-
-  // useEffect(() => {
-  //   if (typeof window === "undefined") {
-  //     return;
-  //   }
-
-  //   gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
-
-  //   const ctx = gsap.context(() => {
-  //     const sections = gsap.utils.toArray<HTMLElement>(".section");
-
-  //     sections.forEach((section, i) => {
-  //       ScrollTrigger.create({
-  //         trigger: section,
-  //         start: "top top",
-  //         pin: true,
-  //         pinSpacing: false,
-  //       });
-
-  //       if (i !== sections.length - 1) {
-  //         gsap.to(section, {
-  //           opacity: 0,
-  //           ease: "power1.inOut",
-  //           scrollTrigger: {
-  //             trigger: sections[i + 1],
-  //             start: "top bottom",
-  //             end: "top top",
-  //             scrub: true,
-  //           },
-  //         });
-  //       }
-  //     });
-  //   }, mainRef);
-
-  //   return () => ctx.revert();
-  // }, []);
-
   return (
-    <Box ref={mainRef}>
+    <Box>
       <Navigation />
       {/* <Background /> */}
       <GalaxyBackground />
@@ -79,6 +38,7 @@ export default function Home() {
       <Box id="contact" className="section">
         <Contact />
       </Box>
+      <Footer />
     </Box>
   );
 }

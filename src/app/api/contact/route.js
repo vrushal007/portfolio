@@ -6,13 +6,21 @@ export const POST = async (request) => {
     const { EMAIL, PASSWORD } = process.env;
 
     const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false, // Use STARTTLS
       auth: {
         user: EMAIL,
         pass: PASSWORD,
       },
+    });
+
+    await transporter.verify((error, success) => {
+      if (error) {
+        console.error("SMTP Verification Error:", error);
+      } else {
+        console.log("SMTP Server is ready to send emails.");
+      }
     });
 
     const { email, name, message } = await request.json();

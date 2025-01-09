@@ -4,9 +4,9 @@ import { OrbitControls } from "@react-three/drei";
 import { useMemo, useRef } from "react";
 
 const GALAXY_CONFIG = {
-  PARTICLES_COUNT: 1000,
+  PARTICLES_COUNT: 2000,
   BRANCHES: 4,
-  RADIUS: 4,
+  RADIUS: 10,
   SPIN: 1.5,
   RANDOMNESS: 0.3,
   RANDOMNESS_POWER: 3,

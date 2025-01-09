@@ -14,7 +14,6 @@ import {
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 import WorkIcon from "@mui/icons-material/Work";
-import { CheckCircleOutline } from "@mui/icons-material";
 
 interface ExperienceProps {
   title: string;

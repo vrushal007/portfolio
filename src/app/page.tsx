@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef } from "react";
 import { Box } from "@mui/material";
 import Navigation from "@/components/layout/Navigation";
 
@@ -12,7 +11,7 @@ import Experience from "@/components/sections/Experience";
 import Projects from "@/components/sections/Projects";
 import Contact from "@/components/sections/Contact";
 import GalaxyBackground from "@/components/layout/GalaxyBackround";
-import Footer from "@/components/Footer";
+import Footer from "@/components/layout/Footer";
 
 import CodeIcon from "@mui/icons-material/Code";
 import BrushIcon from "@mui/icons-material/Brush";

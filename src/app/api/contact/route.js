@@ -4,7 +4,8 @@ import nodemailer from "nodemailer";
 export const POST = async (request) => {
   try {
     const { EMAIL, PASSWORD } = process.env;
-
+    console.log("EMAIL", EMAIL);
+    console.log("PASSWORD", PASSWORD);
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,

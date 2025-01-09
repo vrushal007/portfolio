@@ -3,16 +3,15 @@ import nodemailer from "nodemailer";
 
 export const POST = async (request) => {
   try {
-    const { EMAIL, PASSWORD } = process.env;
-    console.log("EMAIL", EMAIL);
-    console.log("PASSWORD", PASSWORD);
+    console.log("EMAIL", NEXT_PUBLIC_SENDER_EMAIL);
+    console.log("PASSWORD", NEXT_PUBLIC_SENDER_PASSWORD);
     const transporter = nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
       secure: false, // Use STARTTLS
       auth: {
-        user: process.env.EMAIL,
-        pass: process.env.PASSWORD,
+        user: process.env.NEXT_PUBLIC_SENDER_EMAIL,
+        pass: process.env.NEXT_PUBLIC_SENDER_PASSWORD,
       },
     });
 

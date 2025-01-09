@@ -41,6 +41,7 @@ export const POST = async (request) => {
     return NextResponse.json(
       {
         message: "An error occurred while sending the message",
+        error,
       },
       {
         status: 500,

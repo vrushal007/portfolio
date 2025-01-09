@@ -1,35 +1,22 @@
 // src/components/sections/About.tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Box, Container, Typography, Grid, Paper } from "@mui/material";
 import gsap from "gsap";
-import CodeIcon from "@mui/icons-material/Code";
-import BrushIcon from "@mui/icons-material/Brush";
-import SpeedIcon from "@mui/icons-material/Speed";
 
-const features = [
-  {
-    icon: <CodeIcon sx={{ fontSize: 40 }} />,
-    title: "Clean Code",
-    description:
-      "Writing elegant, efficient, and maintainable code is not just a practice, it's a passion.",
-  },
-  {
-    icon: <BrushIcon sx={{ fontSize: 40 }} />,
-    title: "Creative Design",
-    description:
-      "Combining aesthetic excellence with functional design to create memorable user experiences.",
-  },
-  {
-    icon: <SpeedIcon sx={{ fontSize: 40 }} />,
-    title: "Performance",
-    description:
-      "Optimizing every aspect to ensure lightning-fast, responsive applications.",
-  },
-];
+interface AboutProps {
+  data: {
+    description: string;
+    features: {
+      icon: React.ReactNode;
+      title: string;
+      description: string;
+    }[];
+  };
+}
 
-export default function About() {
+export default function About({ data: { description, features } }: AboutProps) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
@@ -90,10 +77,7 @@ export default function About() {
             About Me
           </Typography>
           <Typography variant="h5" sx={{ color: "text.secondary", mb: 4 }}>
-            I'm a passionate full-stack developer with a love for creating
-            beautiful, functional, and user-centered digital experiences.
-            Combining technical expertise with creative problem-solving to build
-            innovative web solutions.
+            {description}
           </Typography>
         </Box>
 

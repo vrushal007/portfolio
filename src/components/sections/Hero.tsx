@@ -6,7 +6,13 @@ import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { ScrollToPlugin } from "gsap/all";
 
-export default function Hero() {
+interface HeroProps {
+  name: string;
+  title: string;
+  description: string;
+}
+
+export default function Hero({ data }: { data: HeroProps }) {
   const textRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
 
@@ -86,7 +92,7 @@ export default function Hero() {
               letterSpacing: 1.5,
             }}
           >
-            Hi, I'm Vrushal Patel 👋
+            {data.name}
           </Typography>
 
           <Typography
@@ -101,7 +107,7 @@ export default function Hero() {
               lineHeight: 1.2,
             }}
           >
-            Software Engineer
+            {data.title}
           </Typography>
 
           <Typography
@@ -113,8 +119,7 @@ export default function Hero() {
               maxWidth: "600px",
             }}
           >
-            I design and develop web applications that are fast, elegant, and
-            user-friendly.
+            {data.description}
           </Typography>
 
           <Stack

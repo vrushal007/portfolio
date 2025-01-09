@@ -16,40 +16,17 @@ import ScrollTrigger from "gsap/ScrollTrigger";
 import WorkIcon from "@mui/icons-material/Work";
 import { CheckCircleOutline } from "@mui/icons-material";
 
-const experiences = [
-  {
-    title: "Software Engineer",
-    company: "Sunbots Innovations LLP",
-    period: "Jun 2023 - Nov 2024",
-    descriptionPoints: [
-      `Built scalable web applications with React.js and Next.js.`,
-      `Accelerated app development using Flutter Flow.`,
-      `Enhanced analytics with Google Analytics APIs and ELK stack.`,
-      `Managed deployments on AWS EC2, RDS, and Amplify.`,
-    ],
-  },
-  {
-    title: "Frontend Developer Intern",
-    company: "Obligate Solutions",
-    period: "Jun 2022 - Dec 2022",
-    descriptionPoints: [
-      `Developed an e-commerce website with React.js.`,
-      `Ensured seamless integration with cross-functional teams.`,
-    ],
-  },
-  {
-    title: "Android Developer Intern",
-    company: "Veybit Technologies Pvt. Ltd.",
-    period: "Jan 2022 - Feb 2022",
-    descriptionPoints: [
-      `Developed and deployed a mobile app on Google Play Store.`,
-      `Handled coding, testing, and troubleshooting independently.`,
-      `Managed the entire app project and provided maintenance.`,
-    ],
-  },
-];
+interface ExperienceProps {
+  title: string;
+  experiences: {
+    title: string;
+    company: string;
+    period: string;
+    descriptionPoints: string[];
+  }[];
+}
 
-export default function Experience() {
+export default function Experience({ data }: { data: ExperienceProps }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
@@ -123,7 +100,7 @@ export default function Experience() {
             WebkitTextFillColor: "transparent",
           }}
         >
-          Experience
+          {data.title}
         </Typography>
 
         <Box
@@ -194,7 +171,7 @@ export default function Experience() {
               },
             }}
           />
-          {experiences.map((exp, index) => (
+          {data.experiences.map((exp, index) => (
             <Box
               key={index}
               sx={{
@@ -204,7 +181,7 @@ export default function Experience() {
                   xs: "flex-end",
                   md: index % 2 === 0 ? "flex-start" : "flex-end",
                 },
-                mb: index === experiences.length - 1 ? 0 : 6,
+                mb: index === data.experiences.length - 1 ? 0 : 6,
                 position: "relative",
                 "&::before": {
                   content: '""',

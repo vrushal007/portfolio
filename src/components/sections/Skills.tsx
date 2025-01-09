@@ -10,63 +10,28 @@ import {
   LinearProgress,
 } from "@mui/material";
 import gsap from "gsap";
-import CodeIcon from "@mui/icons-material/Code";
-import StorageIcon from "@mui/icons-material/Storage";
-import BuildIcon from "@mui/icons-material/Build";
-/*
-Programming Language :
-C++, JavaScript
-Technologies And Frameworks:
-React.JS, Next.JS, Jest,
-Node.JS, Express.JS, Nest.JS,
-ELK, Redux, Flutter, Socket.IO,
-Microservices
-Database Management:
-SQL, MongoDB
-Platforms:
-VS Code, GitHub, Docker,
-Android Studio, Flutterflow,
-Firebase
 
-*/
+interface Skill {
+  name: string;
+  level: number;
+}
 
-const skillsData = {
-  frontend: {
-    icon: <CodeIcon sx={{ fontSize: 40 }} />,
-    title: "Frontend",
-    skills: [
-      { name: "React/Next.js", level: 92 },
-      { name: "JavaScript/TypeScript", level: 90 },
-      { name: "Redux", level: 90 },
-      { name: "HTML/CSS", level: 95 },
-      { name: "Material UI", level: 88 },
-    ],
-  },
-  backend: {
-    icon: <StorageIcon sx={{ fontSize: 40 }} />,
-    title: "Backend",
-    skills: [
-      { name: "Node.js", level: 90 },
-      { name: "Nest.js", level: 82 },
-      { name: "Express.js", level: 85 },
-      { name: "Socket.IO", level: 80 },
-      { name: "Microservices", level: 75 },
-    ],
-  },
-  tools: {
-    icon: <BuildIcon sx={{ fontSize: 40 }} />,
-    title: "Tools & Others",
-    skills: [
-      { name: "Docker", level: 85 },
-      { name: "ELK Stack", level: 70 },
-      { name: "AWS", level: 70 },
-      { name: "Firebase", level: 85 },
-      { name: "Flutterflow", level: 90 },
-    ]
-  },
-};
+interface SkillCategory {
+  icon: React.ReactNode;
+  title: string;
+  skills: Skill[];
+}
 
-export default function Skills() {
+interface SkillsProps {
+  title: string;
+  skills: {
+    frontend: SkillCategory;
+    backend: SkillCategory;
+    tools: SkillCategory;
+  };
+}
+
+export default function Skills({ data }: { data: SkillsProps }) {
   const sectionRef = useRef<HTMLDivElement>(null);
   const cardsRef = useRef<HTMLDivElement>(null);
 
@@ -122,11 +87,11 @@ export default function Skills() {
             WebkitTextFillColor: "transparent",
           }}
         >
-          Technical Skills
+          {data.title}
         </Typography>
 
         <Grid container spacing={4} ref={cardsRef}>
-          {Object.values(skillsData).map((category, index) => (
+          {Object.values(data.skills).map((category, index) => (
             <Grid item xs={12} md={4} key={index}>
               <Paper
                 elevation={0}

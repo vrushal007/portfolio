@@ -1,7 +1,7 @@
-import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useMemo, useRef, useEffect } from "react";
 import * as THREE from "three";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
+import { useMemo, useRef } from "react";
 
 const GALAXY_CONFIG = {
   PARTICLES_COUNT: 1000,
@@ -10,29 +10,23 @@ const GALAXY_CONFIG = {
   SPIN: 1.5,
   RANDOMNESS: 0.3,
   RANDOMNESS_POWER: 3,
+  ROTATION_SPEED: 0.1,
   COLORS: {
     INNER: "#ff6030",
     MIDDLE: "#1b3984",
     OUTER: "#000000",
-
   },
 };
 
 function Galaxy() {
   const galaxyRef = useRef<THREE.Points>(null);
-  const timeRef = useRef(0);
-  const mousePos = useRef({ x: 0, y: 0 });
-  const { viewport } = useThree();
 
   const particlesPosition = useMemo(() => {
     const positions = new Float32Array(GALAXY_CONFIG.PARTICLES_COUNT * 3);
     const colors = new Float32Array(GALAXY_CONFIG.PARTICLES_COUNT * 3);
-    const originalPositions = new Float32Array(
-      GALAXY_CONFIG.PARTICLES_COUNT * 3
-    );
 
     for (let i = 0; i < GALAXY_CONFIG.PARTICLES_COUNT; i++) {
-      const radius = Math.random() * GALAXY_CONFIG.RADIUS + 0.5;
+      const radius = Math.random() * GALAXY_CONFIG.RADIUS;
       const branchAngle =
         ((i % GALAXY_CONFIG.BRANCHES) / GALAXY_CONFIG.BRANCHES) * Math.PI * 2;
       const spinAngle = radius * GALAXY_CONFIG.SPIN;
@@ -50,17 +44,10 @@ function Galaxy() {
         (Math.random() < 0.5 ? 1 : -1) *
         GALAXY_CONFIG.RANDOMNESS;
 
-      const x = Math.cos(branchAngle + spinAngle) * radius + randomX;
-      const y = randomY;
-      const z = Math.sin(branchAngle + spinAngle) * radius + randomZ;
-
-      positions[i * 3] = x;
-      positions[i * 3 + 1] = y;
-      positions[i * 3 + 2] = z;
-
-      originalPositions[i * 3] = x;
-      originalPositions[i * 3 + 1] = y;
-      originalPositions[i * 3 + 2] = z;
+      positions[i * 3] = Math.cos(branchAngle + spinAngle) * radius + randomX;
+      positions[i * 3 + 1] = randomY;
+      positions[i * 3 + 2] =
+        Math.sin(branchAngle + spinAngle) * radius + randomZ;
 
       const mixedColor = new THREE.Color(GALAXY_CONFIG.COLORS.INNER)
         .lerp(new THREE.Color(GALAXY_CONFIG.COLORS.MIDDLE), radius / 4)
@@ -71,55 +58,12 @@ function Galaxy() {
       colors[i * 3 + 2] = mixedColor.b;
     }
 
-    return { positions, colors, originalPositions };
-  }, []);
-
-  useEffect(() => {
-    const handleMouseMove = (event: MouseEvent) => {
-      mousePos.current = {
-        x: (event.clientX / window.innerWidth) * 2 - 1,
-        y: -(event.clientY / window.innerHeight) * 2 + 1,
-      };
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    return () => window.removeEventListener("mousemove", handleMouseMove);
+    return { positions, colors };
   }, []);
 
   useFrame((state, delta) => {
     if (galaxyRef.current) {
-      timeRef.current += delta;
-      const positions = galaxyRef.current.geometry.attributes.position.array;
-      const originalPositions = particlesPosition.originalPositions;
-
-      for (let i = 0; i < GALAXY_CONFIG.PARTICLES_COUNT; i++) {
-        const x = originalPositions[i * 3];
-        const y = originalPositions[i * 3 + 1];
-        const z = originalPositions[i * 3 + 2];
-
-        const distanceToMouse = Math.sqrt(
-          Math.pow(x - (mousePos.current.x * viewport.width) / 2, 2) +
-            Math.pow(z - (mousePos.current.y * viewport.height) / 2, 2)
-        );
-
-        const maxDistance = 2;
-        const distortionStrength = Math.max(
-          0,
-          1 - distanceToMouse / maxDistance
-        );
-        const distortionAmplitude = 0.5;
-        const distortion =
-          Math.sin(timeRef.current * 2) *
-          distortionAmplitude *
-          distortionStrength;
-
-        positions[i * 3] = x + distortion * (Math.random() - 0.5) * 0.1;
-        positions[i * 3 + 1] = y + distortion * (Math.random() - 0.5) * 0.1;
-        positions[i * 3 + 2] = z + distortion * (Math.random() - 0.5) * 0.1;
-      }
-
-      galaxyRef.current.geometry.attributes.position.needsUpdate = true;
-      galaxyRef.current.rotation.y += delta * 0.1;
+      galaxyRef.current.rotation.y += delta * GALAXY_CONFIG.ROTATION_SPEED;
     }
   });
 
@@ -166,7 +110,7 @@ export default function GalaxyBackground() {
     >
       <Canvas
         camera={{
-          position: [0, 2, 5],
+          position: [0, 3, 7],
           fov: 65,
           near: 0.3,
           far: 100,

@@ -1,38 +1,40 @@
 import {
   Container,
-  Box,
   Typography,
-  Chip,
-  IconButton,
-  Grid,
+  Box,
   Card,
-  CardMedia,
   CardContent,
   CardActions,
+  IconButton,
+  Chip,
+  Grid2,
 } from "@mui/material";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LaunchIcon from "@mui/icons-material/Launch";
 
-const projects = [
-  {
-    title: "Unified Pay",
-    description: "A Unified Payment Gateway Integration Library",
-    technologies: ["TypeScript", "Node.JS", "OOPs"],
-    points: [
-      "Unified Payment Integration: Built UnifyPay, a TypeScript library merging Stripe and Razorpay for managing orders, subscriptions, and plans through a single interface.",
-      "Scalable & Extensible Design: Implemented type-safe configurations and modular abstractions, ensuring maintainability and support for future providers.",
-      "Developer-Centric Optimization: Streamlined workflows with provider-specific logic and authored detailed documentation for easy adoption.",
-    ],
-    githubLink: "https://github.com/DarshilChauhan1/unified-pay",
-    liveLink: "https://npmjs.com/package/unified-pay-node",
-    image: "/assets/images/npm.png",
-  },
-  
-];
+interface ProjectProps {
+  title: string;
+  projects: {
+    title: string;
+    description: string;
+    technologies: string[];
+    points: string[];
+    githubLink: string;
+    liveLink: string;
+  }[];
+}
 
-const Projects = () => {
+const Projects = ({ data }: { data: ProjectProps }) => {
   return (
-    <Container maxWidth="lg" sx={{ py: 8 }}>
+    <Container
+      sx={{
+        overflowX: "auto",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        py: 4,
+      }}
+    >
       <Typography
         variant="h2"
         sx={{
@@ -44,19 +46,43 @@ const Projects = () => {
           WebkitTextFillColor: "transparent",
         }}
       >
-        Featured Projects
+        {data.title}
       </Typography>
 
-      <Grid container spacing={4}>
-        {projects.map((project, index) => (
-          <Grid item xs={12} sm={12} md={12} key={index}>
+      <Grid2
+        container
+        spacing={2}
+        columns={12}
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "stretch",
+        }}
+      >
+        {data.projects.map((project, index) => (
+          <Grid2
+            alignItems={"stretch"}
+            key={index}
+            size={{
+              lg: 4,
+              md: 4,
+              xs: 12,
+            }}
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "stretch",
+            }}
+          >
             <Card
+              key={index}
               sx={{
                 height: "100%",
-                maxWidth: 600,
-                margin: "auto",
                 display: "flex",
                 flexDirection: "column",
+                justifyContent: "space-between",
+                flex: "0 0 auto",
                 bgcolor: "rgba(255, 255, 255, 0.05)",
                 backdropFilter: "blur(10px)",
                 transition:
@@ -67,17 +93,9 @@ const Projects = () => {
                 },
               }}
             >
-              <CardMedia
-                component="img"
-                height="200"
-                image={project.image}
-                sx={{ objectFit: "contain",pt: 2 }}
-                alt={project.title}
-              />
-              <CardContent sx={{ flexGrow: 1, p: 3 }}>
+              <CardContent>
                 <Typography
                   variant="h5"
-                  component="h3"
                   gutterBottom
                   sx={{ color: "primary.main" }}
                 >
@@ -135,9 +153,9 @@ const Projects = () => {
                 </IconButton>
               </CardActions>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
     </Container>
   );
 };

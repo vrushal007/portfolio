@@ -26,8 +26,8 @@ export const POST = async (request) => {
     const { email, name, message } = await request.json();
 
     const mailOptions = {
-      from: EMAIL,
-      to: EMAIL,
+      from: process.env.NEXT_PUBLIC_SENDER_EMAIL,
+      to: process.env.NEXT_PUBLIC_SENDER_EMAIL,
       subject: `Portfolio: Message from ${name}`,
       text: `
                 You have received a new message from your portfolio website contact form.\n\n

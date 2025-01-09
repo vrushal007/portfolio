@@ -11,8 +11,8 @@ export const POST = async (request) => {
       port: 587,
       secure: false, // Use STARTTLS
       auth: {
-        user: EMAIL,
-        pass: PASSWORD,
+        user: process.env.EMAIL,
+        pass: process.env.PASSWORD,
       },
     });
 

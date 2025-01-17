@@ -1,39 +1,39 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
   palette: {
-    mode: 'dark',
+    mode: "dark",
     primary: {
-      main: '#00f5d4',
-      light: '#33f7dc',
-      dark: '#00ab94',
+      main: "#00f5d4",
+      light: "#33f7dc",
+      dark: "#00ab94",
     },
     secondary: {
-      main: '#7209b7',
-      light: '#8b3ac5',
-      dark: '#4f0680',
+      main: "#7209b7",
+      light: "#8b3ac5",
+      dark: "#4f0680",
     },
     background: {
-      default: '#0a0a0a',
-      paper: '#121212',
+      default: "#0a0a0a",
+      paper: "#121212",
     },
   },
   typography: {
     fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
     h1: {
-      fontSize: '4rem',
+      fontSize: "4rem",
       fontWeight: 700,
     },
     h2: {
-      fontSize: '3rem',
+      fontSize: "3rem",
       fontWeight: 600,
     },
     h3: {
-      fontSize: '2.5rem',
+      fontSize: "2.5rem",
       fontWeight: 600,
     },
     body1: {
-      fontSize: '1rem',
+      fontSize: "1rem",
       lineHeight: 1.75,
     },
   },
@@ -42,8 +42,23 @@ export const theme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: 8,
-          textTransform: 'none',
+          textTransform: "none",
           fontWeight: 600,
+        },
+      },
+    },
+    MuiCssBaseline: {
+      styleOverrides: {
+        "::selection": {
+          backgroundColor: "#00f5d4",
+          background: "#00f5d4",
+          color: "#ffffff!important",
+          WebkitTextFillColor: "#ffffff!important",
+        },
+        "::-moz-selection": {
+          backgroundColor: "#00f5d4",
+          color: "#ffffff!important",
+          WebkitTextFillColor: "#ffffff!important",
         },
       },
     },

@@ -6,6 +6,7 @@ import { theme } from "@/styles/theme";
 import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Cursor from "@/components/layout/Cursor";
 
 export default function RootLayout({
   children,
@@ -28,6 +29,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <Cursor />
           {children}
         </ThemeProvider>
       </body>

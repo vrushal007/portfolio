@@ -115,7 +115,7 @@ export default function Experience({ data }: { data: ExperienceProps }) {
                 md: "50%",
               },
               transform: "translateX(-50%)",
-              width: "5px", // Thicker line
+              width: "5px",
               height: "100%",
               background: "linear-gradient(180deg, #bbb, #bbb)",
               opacity: 0.3,
@@ -139,15 +139,6 @@ export default function Experience({ data }: { data: ExperienceProps }) {
                 "0 0 20px 5px rgba(114, 9, 183, 0.8), 0 0 30px 10px rgba(0, 245, 212, 0.5)",
               zIndex: 0,
               animation: "moveThumb linear 0s infinite",
-              "&::before, &::after": {
-                content: '""',
-                position: "absolute",
-                width: "4px",
-                height: "4px",
-                borderRadius: "50%",
-                background: "#ffffff",
-                opacity: 0.7,
-              },
               "&::before": {
                 top: "-6px",
                 left: "-2px",

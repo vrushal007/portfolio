@@ -1,64 +1,42 @@
 import { createTheme } from "@mui/material/styles";
 
+// Editorial, kinetic palette — warm near-black + paper, one loud accent (ember)
+// and one acid counter-accent. Deliberately not blue/purple-gradient "AI" default.
+export const colors = {
+  bg: "#0d0c0a",
+  bgSoft: "#151310",
+  paper: "#f3ede1",
+  ink: "#f3ede1",
+  inkOnPaper: "#151310",
+  muted: "rgba(243,237,225,0.58)",
+  mutedOnPaper: "rgba(21,19,16,0.6)",
+  line: "rgba(243,237,225,0.14)",
+  lineOnPaper: "rgba(21,19,16,0.14)",
+  ember: "#ff4d23",
+  lime: "#c8ff4d",
+};
+
 export const theme = createTheme({
   palette: {
     mode: "dark",
-    primary: {
-      main: "#00f5d4",
-      light: "#33f7dc",
-      dark: "#00ab94",
-    },
-    secondary: {
-      main: "#7209b7",
-      light: "#8b3ac5",
-      dark: "#4f0680",
-    },
-    background: {
-      default: "#0a0a0a",
-      paper: "#121212",
-    },
+    primary: { main: colors.ember },
+    secondary: { main: colors.lime },
+    background: { default: colors.bg, paper: colors.bgSoft },
+    text: { primary: colors.ink, secondary: colors.muted },
   },
   typography: {
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
-    h1: {
-      fontSize: "4rem",
-      fontWeight: 700,
-    },
-    h2: {
-      fontSize: "3rem",
-      fontWeight: 600,
-    },
-    h3: {
-      fontSize: "2.5rem",
-      fontWeight: 600,
-    },
-    body1: {
-      fontSize: "1rem",
-      lineHeight: 1.75,
-    },
+    fontFamily: "var(--font-body), sans-serif",
   },
   components: {
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-          textTransform: "none",
-          fontWeight: 600,
-        },
-      },
-    },
     MuiCssBaseline: {
       styleOverrides: {
         "::selection": {
-          backgroundColor: "#00f5d4",
-          background: "#00f5d4",
-          color: "#ffffff!important",
-          WebkitTextFillColor: "#ffffff!important",
+          backgroundColor: colors.ember,
+          color: colors.bg,
         },
         "::-moz-selection": {
-          backgroundColor: "#00f5d4",
-          color: "#ffffff!important",
-          WebkitTextFillColor: "#ffffff!important",
+          backgroundColor: colors.ember,
+          color: colors.bg,
         },
       },
     },

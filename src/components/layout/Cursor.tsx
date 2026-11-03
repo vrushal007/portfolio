@@ -1,89 +1,81 @@
+"use client";
+
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
-import { Box } from "@mui/material";
 
-const Cursor = () => {
-  const cursorRef = useRef<HTMLDivElement>(null);
+export default function Cursor() {
+  const dotRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    let hover = false;
-    const cursor = cursorRef.current!;
-    const mousePos = { x: 0, y: 0 };
-    const cursorPos = { x: 0, y: 0 };
-    document.addEventListener("mousemove", (e) => {
-      mousePos.x = e.clientX;
-      mousePos.y = e.clientY;
-    });
-    requestAnimationFrame(function loop() {
-      if (!hover) {
-        const delay = 6;
-        cursorPos.x += (mousePos.x - cursorPos.x) / delay;
-        cursorPos.y += (mousePos.y - cursorPos.y) / delay;
-        gsap.to(cursor, { x: cursorPos.x, y: cursorPos.y, duration: 0.1 });
-        // cursor.style.transform = `translate(${cursorPos.x}px, ${cursorPos.y}px)`;
-      }
-      requestAnimationFrame(loop);
-    });
-    document.querySelectorAll("[data-cursor]").forEach((item) => {
-      const element = item as HTMLElement;
-      element.addEventListener("mouseover", (e: MouseEvent) => {
-        const target = e.currentTarget as HTMLElement;
-        const rect = target.getBoundingClientRect();
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
-        if (element.dataset.cursor === "icons") {
-          cursor.classList.add("cursor-icons");
+    const dot = dotRef.current!;
+    const ring = ringRef.current!;
+    const ringX = gsap.quickTo(ring, "x", { duration: 0.5, ease: "power3" });
+    const ringY = gsap.quickTo(ring, "y", { duration: 0.5, ease: "power3" });
+    const dotX = gsap.quickTo(dot, "x", { duration: 0.1 });
+    const dotY = gsap.quickTo(dot, "y", { duration: 0.1 });
 
-          gsap.to(cursor, { x: rect.left, y: rect.top, duration: 0.1 });
-          //   cursor.style.transform = `translate(${rect.left}px,${rect.top}px)`;
-          cursor.style.setProperty("--cursorH", `${rect.height}px`);
-          hover = true;
-        }
-        if (element.dataset.cursor === "disable") {
-          cursor.classList.add("cursor-disable");
-        }
-      });
-      element.addEventListener("mouseout", () => {
-        cursor.classList.remove("cursor-disable", "cursor-icons");
-        hover = false;
-      });
+    const onMove = (e: MouseEvent) => {
+      ringX(e.clientX);
+      ringY(e.clientY);
+      dotX(e.clientX);
+      dotY(e.clientY);
+    };
+    window.addEventListener("mousemove", onMove);
+
+    const targets = document.querySelectorAll("[data-cursor]");
+    const onEnter = () => gsap.to(ring, { scale: 2.4, duration: 0.3 });
+    const onLeave = () => gsap.to(ring, { scale: 1, duration: 0.3 });
+    targets.forEach((el) => {
+      el.addEventListener("mouseenter", onEnter);
+      el.addEventListener("mouseleave", onLeave);
     });
+
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      targets.forEach((el) => {
+        el.removeEventListener("mouseenter", onEnter);
+        el.removeEventListener("mouseleave", onLeave);
+      });
+    };
   }, []);
 
   return (
-    <Box
-      ref={cursorRef}
-      sx={{
-        "--size": "0px",
-        position: "fixed",
-        top: "calc(var(--size) / -2)",
-        left: "calc(var(--size) / -2)",
-        width: "var(--size)",
-        height: "var(--size)",
-        borderRadius: "50px",
-        pointerEvents: "none",
-        zIndex: 99,
-        backgroundColor: "#e6c3ff",
-        boxShadow: "0px 0px 30px 0px rgb(175, 131, 255)",
-        mixBlendMode: "difference",
-        transition:
-          "top 0.3s ease-out, left 0.3s ease-out, width 0.3s ease-out, height 0.3s ease-out",
-        "&.cursor-icons": {
-          top: "10px",
-          left: "10px",
-          height: "calc(var(--cursorH) - 20px)",
-          transition: "all 0.5s ease-out, height 0.5s ease-in-out",
-        },
-        "&.cursor-disable": {
-          "--size": "0px",
-        },
-        "@media only screen and (min-width: 600px)": {
-          "--size": "50px",
-          "&.cursor-disable": {
-            "--size": "0px",
-          },
-        },
-      }}
-    />
+    <>
+      <div
+        ref={dotRef}
+        style={{
+          position: "fixed",
+          top: -3,
+          left: -3,
+          width: 6,
+          height: 6,
+          borderRadius: "50%",
+          background: "var(--ember)",
+          pointerEvents: "none",
+          zIndex: 10000,
+          mixBlendMode: "difference",
+        }}
+        className="hide-on-mobile"
+      />
+      <div
+        ref={ringRef}
+        style={{
+          position: "fixed",
+          top: -16,
+          left: -16,
+          width: 32,
+          height: 32,
+          borderRadius: "50%",
+          border: "1px solid var(--ember)",
+          pointerEvents: "none",
+          zIndex: 9999,
+          mixBlendMode: "difference",
+        }}
+        className="hide-on-mobile"
+      />
+    </>
   );
-};
-
-export default Cursor;
+}

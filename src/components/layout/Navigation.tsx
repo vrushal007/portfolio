@@ -1,198 +1,137 @@
-// src/components/layout/Navigation.tsx
 "use client";
 
 import { useState, useEffect } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Box,
-  Button,
-  IconButton,
-  Drawer,
-  useTheme,
-  useMediaQuery,
-  Typography,
-} from "@mui/material";
+import { Box, IconButton, useMediaQuery } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { ScrollToPlugin, ScrollTrigger } from "gsap/all";
+import CloseIcon from "@mui/icons-material/Close";
 import gsap from "gsap";
+import { profile } from "@/data/profile";
 
-const navItems = [
-  { label: "Home", id: "hero" },
-  { label: "About", id: "about" },
-  { label: "Skills", id: "skills" },
-  { label: "Experience", id: "experience" },
-  { label: "Projects", id: "projects" },
-  { label: "Contact", id: "contact" },
-];
+const navItems = profile.nav;
 
 export default function Navigation() {
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [open, setOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width:900px)");
 
-  useEffect(() => {
-    gsap.registerPlugin(ScrollToPlugin);
-  }, []);
-
-  // Handle scroll to section
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      gsap.to(window, {
-        duration: 1,
-        scrollTo: { y: `#${id}`, offsetY: 50 },
-        ease: "power3.inOut",
-      });
-      setMobileOpen(false);
-    }
-  };
-
-  // Update active section based on scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-
-      navItems.forEach(({ id }) => {
-        const element = document.getElementById(id);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (
-            scrollPosition >= offsetTop - 100 &&
-            scrollPosition < offsetTop + offsetHeight - 100
-          ) {
-            setActiveSection(id);
-          }
-        }
-      });
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Initial animation
   useEffect(() => {
     gsap.from(".nav-item", {
-      y: -50,
+      y: -30,
       opacity: 0,
       duration: 0.6,
-      stagger: 0.1,
+      stagger: 0.08,
+      delay: 0.2,
       ease: "power3.out",
     });
   }, []);
 
+  const scrollToSection = (id: string) => {
+    window.__lenis?.scrollTo(`#${id}`, { duration: 1.2 });
+    setOpen(false);
+  };
+
   return (
-    <>
-      <AppBar
-        position="fixed"
+    <Box
+      component="nav"
+      sx={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        px: { xs: 3, md: 5 },
+        py: 2.5,
+        mixBlendMode: "difference",
+      }}
+    >
+      <Box
+        data-cursor="link"
+        onClick={() => scrollToSection("hero")}
         sx={{
-          background: "rgba(18, 18, 18, 0.8)",
-          backdropFilter: "blur(8px)",
-          boxShadow: "none",
+          fontFamily: "var(--font-display)",
+          fontSize: "1.4rem",
+          letterSpacing: "0.02em",
+          cursor: "pointer",
+          color: "var(--ink)",
         }}
       >
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Logo */}
-          <Typography
-            variant="h6"
-            sx={{
-              background: "linear-gradient(45deg, #00f5d4, #7209b7)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              fontWeight: 700,
-            }}
-          >
-            PORTFOLIO
-          </Typography>
+        {profile.content.nav.logo}
+      </Box>
 
-          {/* Mobile Menu Icon */}
-          {isMobile && (
-            <IconButton
-              color="inherit"
-              edge="start"
-              onClick={() => setMobileOpen(!mobileOpen)}
+      {isMobile ? (
+        <>
+          <IconButton onClick={() => setOpen(!open)} sx={{ color: "var(--ink)" }}>
+            {open ? <CloseIcon /> : <MenuIcon />}
+          </IconButton>
+          {open && (
+            <Box
+              sx={{
+                position: "fixed",
+                inset: 0,
+                bgcolor: "var(--bg)",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "flex-start",
+                gap: 2,
+                px: 4,
+                mixBlendMode: "normal",
+              }}
             >
-              <MenuIcon />
-            </IconButton>
-          )}
-
-          {/* Desktop Navigation */}
-          {!isMobile && (
-            <Box sx={{ display: "flex", gap: 2 }}>
               {navItems.map(({ label, id }) => (
-                <Button
+                <Box
                   key={id}
-                  className="nav-item"
                   onClick={() => scrollToSection(id)}
                   sx={{
-                    color: "white",
-                    position: "relative",
-                    "&::after": {
-                      content: '""',
-                      position: "absolute",
-                      bottom: 0,
-                      left: 0,
-                      width: activeSection === id ? "100%" : "0%",
-                      height: "2px",
-                      background: "linear-gradient(45deg, #00f5d4, #7209b7)",
-                      transition: "width 0.3s ease",
-                    },
+                    fontFamily: "var(--font-display)",
+                    fontSize: "2.5rem",
+                    color: "var(--ink)",
+                    cursor: "pointer",
                   }}
                 >
                   {label}
-                </Button>
+                </Box>
               ))}
             </Box>
           )}
-        </Toolbar>
-      </AppBar>
-
-      {/* Mobile Navigation Drawer */}
-      <Drawer
-        variant="temporary"
-        anchor="right"
-        open={mobileOpen}
-        onClose={() => setMobileOpen(false)}
-        ModalProps={{ keepMounted: true }}
-        sx={{
-          "& .MuiDrawer-paper": {
-            width: 240,
-            background: "rgba(18, 18, 18, 1)",
-          },
-          // paper overlay
-          "& .MuiBackdrop-root": { backgroundColor: "rgba(0, 0, 0, 0.6)" },
-        }}
-      >
-        <Box sx={{ display: "flex", gap: 2, flexDirection: "column", p: 2 }}>
+        </>
+      ) : (
+        <Box sx={{ display: "flex", gap: 4 }}>
           {navItems.map(({ label, id }) => (
-            <Button
+            <Box
               key={id}
               className="nav-item"
+              data-cursor="link"
               onClick={() => scrollToSection(id)}
               sx={{
-                color: "white",
+                fontFamily: "var(--font-body)",
+                fontWeight: 500,
+                fontSize: "0.9rem",
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                cursor: "pointer",
+                color: "var(--ink)",
                 position: "relative",
                 "&::after": {
                   content: '""',
                   position: "absolute",
-                  bottom: 0,
-                  // left: 0,
-                  width: activeSection === id ? "30%" : "0%",
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  height: "2px",
-                  background: "linear-gradient(45deg, #00f5d4, #7209b7)",
-                  transition: "width 0.3s ease",
+                  bottom: -4,
+                  left: 0,
+                  width: 0,
+                  height: 2,
+                  bgcolor: "var(--ember)",
+                  transition: "width 0.25s ease",
                 },
+                "&:hover::after": { width: "100%" },
               }}
             >
               {label}
-            </Button>
+            </Box>
           ))}
         </Box>
-      </Drawer>
-    </>
+      )}
+    </Box>
   );
 }

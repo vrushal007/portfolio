@@ -1,41 +1,59 @@
+:root {
+  --font-display: var(--font-display, sans-serif);
+  --font-body: var(--font-body, sans-serif);
+  --bg: #0d0c0a;
+  --ink: #f3ede1;
+  --ember: #ff4d23;
+  --lime: #c8ff4d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
   overflow-x: hidden;
+  font-family: var(--font-body), sans-serif;
 }
 
-.theme-light {
-  --primary: #1976d2;
-  --background: #f5f5f5;
-  --text: #212121;
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ember);
+  border-radius: 0;
 }
 
-.theme-dark {
-  --primary: #90caf9;
-  --background: #0d1117;
-  --text: #ffffff;
+a {
+  color: inherit;
 }
 
-/* Galaxy Background */
-body::before {
-  content: '';
+/* film-grain texture, fixed over the whole page — replaces the old galaxy bg */
+body::after {
+  content: "";
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: radial-gradient(circle, #1b2735 0%, #090a0f 100%);
-  z-index: -1;
-  animation: galaxy 10s infinite alternate ease-in-out;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
-/* Star animations */
-@keyframes galaxy {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 1000px 1000px;
+.hide-on-mobile {
+  display: initial;
+}
+
+@media (max-width: 640px) {
+  .hide-on-mobile {
+    display: none;
   }
 }

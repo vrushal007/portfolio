@@ -1,117 +1,135 @@
-// src/components/sections/About.tsx
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Box, Container, Typography, Grid, Paper } from "@mui/material";
+import { useEffect, useRef } from "react";
+import { Box, Grid } from "@mui/material";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { profile } from "@/data/profile";
+import AnimatedHeading from "@/components/layout/AnimatedHeading";
 
-interface AboutProps {
-  data: {
-    description: string;
-    features: {
-      icon: React.ReactNode;
-      title: string;
-      description: string;
-    }[];
-  };
-}
-
-export default function About({ data: { description, features } }: AboutProps) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const cardsRef = useRef<HTMLDivElement>(null);
+export default function About() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const watermarkRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const section = sectionRef.current;
-    const cards = cardsRef.current;
+    const ctx = gsap.context(() => {
+      // Parallax: watermark drifts slower than the page, giving it depth behind the copy.
+      gsap.to(watermarkRef.current, {
+        yPercent: 25,
+        ease: "none",
+        scrollTrigger: {
+          trigger: rootRef.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
 
-    if (section && cards) {
-      gsap.from(section, {
+      gsap.from(".about-line", {
+        y: 60,
         opacity: 0,
-        y: 100,
         duration: 1,
-        scrollTrigger: {
-          trigger: section,
-          start: "top center+=100",
-          end: "bottom center",
-          toggleActions: "play none none reverse",
-        },
+        stagger: 0.15,
+        ease: "power3.out",
+        scrollTrigger: { trigger: rootRef.current, start: "top 75%" },
       });
 
-      gsap.from(cards.children, {
-        opacity: 0,
-        y: 50,
-        duration: 0.8,
-        stagger: 0.2,
-        scrollTrigger: {
-          trigger: cards,
-          start: "top center+=200",
-          end: "bottom center",
-          toggleActions: "play none none reverse",
-        },
+      document.querySelectorAll<HTMLElement>(".stat-value").forEach((el) => {
+        const target = Number(el.dataset.value);
+        const counter = { n: 0 };
+        gsap.to(counter, {
+          n: target,
+          duration: 1.6,
+          ease: "power2.out",
+          scrollTrigger: { trigger: el, start: "top 90%" },
+          onUpdate: () => {
+            el.textContent = Math.floor(counter.n).toString();
+          },
+        });
       });
-    }
+    }, rootRef);
+    return () => ctx.revert();
   }, []);
 
   return (
-    <Container maxWidth="lg" sx={{ minHeight: "100vh", py: 8 }}>
+    <Box
+      ref={rootRef}
+      sx={{ px: { xs: 3, md: 6 }, py: { xs: 10, md: 16 }, position: "relative", overflow: "hidden" }}
+    >
       <Box
-        ref={sectionRef}
+        ref={watermarkRef}
+        aria-hidden
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 6,
+          position: "absolute",
+          top: "-10%",
+          right: { xs: "-10%", md: "0%" },
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(8rem, 28vw, 22rem)",
+          lineHeight: 1,
+          color: "transparent",
+          WebkitTextStroke: "1px var(--line, rgba(243,237,225,0.14))",
+          pointerEvents: "none",
+          userSelect: "none",
+          zIndex: 0,
         }}
       >
-        {/* About Text */}
-        <Box sx={{ textAlign: "center", maxWidth: 800, mb: 6 }}>
-          <Typography
-            variant="h2"
-            sx={{
-              mb: 3,
-              background: "linear-gradient(45deg, #00f5d4, #7209b7)",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-            }}
-          >
-            About Me
-          </Typography>
-          <Typography variant="h5" sx={{ color: "text.secondary", mb: 4 }}>
-            {description}
-          </Typography>
+        VP
+      </Box>
+
+      <Box sx={{ position: "relative", zIndex: 1 }}>
+        <AnimatedHeading
+          sx={{
+            fontFamily: "var(--font-display)",
+            fontSize: "clamp(2.2rem, 6vw, 4.5rem)",
+            maxWidth: 1000,
+            lineHeight: 1.05,
+            m: 0,
+          }}
+        >
+          {profile.content.about.headingPart1}
+          <Box component="span" sx={{ color: "var(--ember)" }}>{profile.content.about.headingEmphasis1}</Box>
+          {profile.content.about.headingPart2}
+          <Box component="span" sx={{ color: "var(--ember)" }}>{profile.content.about.headingEmphasis2}</Box>
+          {profile.content.about.headingPart3}
+          <Box component="span" sx={{ color: "var(--ember)" }}>{profile.content.about.headingEmphasis3}</Box>
+        </AnimatedHeading>
+
+        <Box
+          className="about-line"
+          sx={{
+            mt: 4,
+            maxWidth: 680,
+            fontSize: "1.1rem",
+            lineHeight: 1.7,
+            opacity: 0.75,
+          }}
+        >
+          {profile.summary}
         </Box>
 
-        {/* Feature Cards */}
-        <Grid container spacing={4} ref={cardsRef}>
-          {features.map((feature, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Paper
-                elevation={0}
+        <Grid container spacing={4} sx={{ mt: 6 }}>
+          {profile.stats.map((s) => (
+            <Grid item xs={6} md={3} key={s.label} className="about-line">
+              <Box
                 sx={{
-                  p: 4,
-                  height: "100%",
-                  background: "rgba(255, 255, 255, 0.03)",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  transition: "transform 0.3s ease-in-out",
-                  "&:hover": {
-                    transform: "translateY(-10px)",
-                    background: "rgba(255, 255, 255, 0.05)",
-                  },
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2.5rem, 5vw, 4rem)",
+                  color: "var(--ember)",
+                  lineHeight: 1,
                 }}
               >
-                <Box sx={{ color: "#00f5d4", mb: 2 }}>{feature.icon}</Box>
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                  {feature.title}
-                </Typography>
-                <Typography variant="body1" sx={{ color: "text.secondary" }}>
-                  {feature.description}
-                </Typography>
-              </Paper>
+                <span className="stat-value" data-value={s.value}>
+                  0
+                </span>
+                {s.suffix}
+              </Box>
+              <Box sx={{ mt: 1, opacity: 0.6, fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                {s.label}
+              </Box>
             </Grid>
           ))}
         </Grid>
       </Box>
-    </Container>
+    </Box>
   );
 }

@@ -1,242 +1,136 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import {
-  Box,
-  Container,
-  Typography,
-  Paper,
-  List,
-  ListItemText,
-  ListItem,
-  ListItemIcon,
-} from "@mui/material";
+import { Box } from "@mui/material";
 import gsap from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
-import WorkIcon from "@mui/icons-material/Work";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { profile } from "@/data/profile";
+import AnimatedHeading from "@/components/layout/AnimatedHeading";
 
-interface ExperienceProps {
-  title: string;
-  experiences: {
-    title: string;
-    company: string;
-    period: string;
-    descriptionPoints: string[];
-  }[];
-}
-
-export default function Experience({ data }: { data: ExperienceProps }) {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const timelineRef = useRef<HTMLDivElement>(null);
-  const progressRef = useRef<HTMLDivElement>(null);
+export default function Experience() {
+  const rootRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Fade in the entire section
-    if (sectionRef.current) {
-      gsap.from(sectionRef.current, {
-        opacity: 0,
-        y: 100,
-        duration: 0.3,
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: "top center+=100",
-          end: "bottom center",
-          toggleActions: "play none none reverse",
-        },
-      });
-    }
-
-    // Animate progress line on scroll
-    if (timelineRef.current && progressRef.current) {
+    const ctx = gsap.context(() => {
       gsap.fromTo(
-        progressRef.current,
-        { height: 0 },
+        lineRef.current,
+        { scaleY: 0 },
         {
-          height: "100%",
+          scaleY: 1,
+          ease: "none",
           scrollTrigger: {
-            trigger: timelineRef.current,
-            start: "top center",
-            end: "bottom center",
-            scrub: true,
+            trigger: rootRef.current,
+            start: "top 70%",
+            end: "bottom 60%",
+            scrub: 0.5,
           },
         }
       );
 
-      gsap.from(timelineRef.current.children, {
-        opacity: 0,
-        x: -50,
-        duration: 0.8,
-        stagger: 0.3,
-        scrollTrigger: {
-          trigger: timelineRef.current,
-          start: "top center+=200",
-          end: "bottom center",
-          toggleActions: "play none none reverse",
-        },
+      gsap.utils.toArray<HTMLElement>(".exp-card").forEach((card, i) => {
+        gsap.from(card, {
+          x: -60,
+          opacity: 0,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: { trigger: card, start: "top 85%" },
+        });
       });
-    }
+    }, rootRef);
+    return () => ctx.revert();
   }, []);
 
   return (
-    <Container sx={{ minHeight: "100vh", py: 8 }}>
-      <Box
-        ref={sectionRef}
+    <Box ref={rootRef} sx={{ px: { xs: 3, md: 6 }, py: { xs: 10, md: 16 } }}>
+      <AnimatedHeading
         sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 6,
+          fontFamily: "var(--font-display)",
+          fontSize: "clamp(2.2rem, 6vw, 4rem)",
+          m: 0,
+          mb: 8,
         }}
       >
-        <Typography
-          variant="h2"
-          sx={{
-            mb: 6,
-            background: "linear-gradient(45deg, #00f5d4, #7209b7)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-          }}
-        >
-          {data.title}
-        </Typography>
+        {profile.content.experience.heading}
+      </AnimatedHeading>
 
+      <Box sx={{ position: "relative", pl: { xs: 3, md: 5 } }}>
         <Box
-          ref={timelineRef}
           sx={{
-            position: "relative",
-            width: "100%",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              left: {
-                xs: "0%",
-                md: "50%",
-              },
-              transform: "translateX(-50%)",
-              width: "5px",
-              height: "100%",
-              background: "linear-gradient(180deg, #bbb, #bbb)",
-              opacity: 0.3,
-            },
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 2,
+            bgcolor: "var(--line, rgba(243,237,225,0.14))",
           }}
-        >
+        />
+        <Box
+          ref={lineRef}
+          sx={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 2,
+            bgcolor: "var(--ember)",
+            transformOrigin: "top",
+          }}
+        />
+
+        {profile.experience.map((exp) => (
           <Box
-            ref={progressRef}
-            sx={{
-              position: "absolute",
-              left: {
-                xs: "0%",
-                md: "50%",
-              },
-              transform: "translateX(-50%)",
-              width: "5px",
-              height: "6px",
-              borderRadius: "50%",
-              background: "radial-gradient(circle, #7209b7 0%, #00f5d4 100%)",
-              boxShadow:
-                "0 0 20px 5px rgba(114, 9, 183, 0.8), 0 0 30px 10px rgba(0, 245, 212, 0.5)",
-              zIndex: 0,
-              animation: "moveThumb linear 0s infinite",
-              "&::before": {
-                top: "-6px",
-                left: "-2px",
-                animation: "sparkOne 1.5s infinite ease-in-out",
-              },
-              "&::after": {
-                bottom: "-6px",
-                right: "-2px",
-                animation: "sparkTwo 1.5s infinite ease-in-out",
-              },
-              "@keyframes sparkOne": {
-                "0%": { transform: "scale(0.5)", opacity: 0 },
-                "50%": { transform: "scale(1.5) translateX(-2px)", opacity: 1 },
-                "100%": { transform: "scale(0.5)", opacity: 0 },
-              },
-              "@keyframes sparkTwo": {
-                "0%": { transform: "scale(0.5)", opacity: 0 },
-                "50%": { transform: "scale(1.5) translateX(2px)", opacity: 1 },
-                "100%": { transform: "scale(0.5)", opacity: 0 },
-              },
-            }}
-          />
-          {data.experiences.map((exp, index) => (
+            key={exp.company}
+            className="exp-card"
+            sx={{ mb: 8, position: "relative", pl: 4 }}
+          >
             <Box
-              key={index}
               sx={{
-                width: "100%",
-                display: "flex",
-                justifyContent: {
-                  xs: "flex-end",
-                  md: index % 2 === 0 ? "flex-start" : "flex-end",
-                },
-                mb: index === data.experiences.length - 1 ? 0 : 6,
-                position: "relative",
-                "&::before": {
-                  content: '""',
-                  position: "absolute",
-                  left: {
-                    xs: "0%",
-                    md: "50%",
-                  },
-                  top: "50%",
-                  transform: "translate(-50%, -50%)",
-                  width: "20px",
-                  height: "20px",
-                  borderRadius: "50%",
-                  background: "#00f5d4",
-                  zIndex: 99,
-                },
+                position: "absolute",
+                left: -6,
+                top: 6,
+                width: 12,
+                height: 12,
+                borderRadius: "50%",
+                bgcolor: "var(--ember)",
+              }}
+            />
+            <Box
+              sx={{
+                fontSize: "0.85rem",
+                letterSpacing: "0.08em",
+                textTransform: "uppercase",
+                color: "var(--ember)",
+                mb: 1,
               }}
             >
-              <Paper
-                sx={{
-                  p: 4,
-                  width: {
-                    xs: "90%",
-                    md: "45%",
-                  },
-                  background: "rgba(255, 255, 255, 0.03)",
-                  backdropFilter: "blur(10px)",
-                  border: "1px solid rgba(255, 255, 255, 0.1)",
-                  transition: "transform 0.3s ease-in-out",
-                  "&:hover": {
-                    transform: "translateY(-10px)",
-                    background: "rgba(255, 255, 255, 0.05)",
-                  },
-                }}
-              >
-                <Box sx={{ color: "#00f5d4", mb: 2 }}>
-                  <WorkIcon sx={{ fontSize: 40 }} />
-                </Box>
-                <Typography variant="h5" sx={{ mb: 1 }}>
-                  {exp.title}
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  sx={{ color: "#00f5d4", mb: 2 }}
-                >
-                  {exp.company}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  sx={{ color: "text.secondary", mb: 2 }}
-                >
-                  {exp.period}
-                </Typography>
-                <List>
-                  {exp.descriptionPoints.map((point, index) => (
-                    <ListItem key={index} sx={{ p: 0 }}>
-                      <ListItemText primary={point} />
-                    </ListItem>
-                  ))}
-                </List>
-              </Paper>
+              {exp.period}
             </Box>
-          ))}
-        </Box>
+            <Box
+              sx={{
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(1.4rem, 3vw, 2.2rem)",
+              }}
+            >
+              {exp.role}
+            </Box>
+            <Box sx={{ opacity: 0.6, mb: 2 }}>
+              {exp.company} — {exp.location}
+            </Box>
+            <Box component="ul" sx={{ m: 0, pl: 3, maxWidth: 760 }}>
+              {exp.bullets.map((b, i) => (
+                <Box
+                  component="li"
+                  key={i}
+                  sx={{ mb: 1, opacity: 0.8, lineHeight: 1.6 }}
+                >
+                  {b}
+                </Box>
+              ))}
+            </Box>
+          </Box>
+        ))}
       </Box>
-    </Container>
+    </Box>
   );
 }
